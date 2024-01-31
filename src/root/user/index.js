@@ -1,4 +1,4 @@
-const db = require('./');
+const db = require('../../db/db.connection');
 
 // Your resolver functions
 const root = {

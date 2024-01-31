@@ -4,12 +4,19 @@ const root = require('./src/root/user/index');
 const { graphqlHTTP } = require('express-graphql');
 
 const app = express();
+const pathArray = ['user']
 
-app.use('/user/graphql', graphqlHTTP({
-  schema: schema,
-  rootValue: root,
-  graphiql: true, // Enable GraphQL web interface
-}));
+pathArray.map((val) => {
+  const routes  = require(`./src/routes/${val}`);
+  const routesIni = new routes(app, graphqlHTTP)
+  routesIni.constructor.getRoutes(app, graphqlHTTP)
+      .then(result => {
+          console.log("result");
+      })
+      .catch(error => {
+          console.error(error);
+      })
+})
 
 const PORT = 3000;
 app.listen(PORT, () => {
