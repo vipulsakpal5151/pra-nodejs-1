@@ -1,21 +1,17 @@
-const db = require('../../src/db/db.connection');
-
 class UserController {
-    constructor() {}
+    constructor({ debugLogs, requiredLogs, mysqlInstance }) {
+        this.debugLogs = debugLogs
+        this.requiredLogs = requiredLogs,
+        this.mysqlInstance = mysqlInstance
+        console.log("OKAY USER this.mysqlInstance USEEEEEEEEEEEE", this.mysqlInstance.executeQuery)
+    }
 
-    static async getUser(id) {
-        const data = await new Promise((resolve, reject) => {
-            db.query('SELECT * FROM user WHERE id = ?', [id], (err, results) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(results);
-                }
-            });
-        });
+    async getUser(id) {
+        await this.debugLogs({ name: 'getUser', value: id })
+        const data =  await this.mysqlInstance.executeQuery('SELECT * FROM user WHERE id = ?', [id])
         console.log("getUser || data::", data)
-        return data[0];
+        return data[0]
     }
 }
 
-module.exports = UserController;
+module.exports = UserController
