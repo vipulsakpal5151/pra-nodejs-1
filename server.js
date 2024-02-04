@@ -1,6 +1,4 @@
 const express = require('express');
-const schema = require('./src/schema/user/index');
-const root = require('./src/root/user/index');
 const { graphqlHTTP } = require('express-graphql');
 
 const app = express();
