@@ -1,61 +1,39 @@
-const mysqlDb = require('./db.connection')
+// dbConfig.js
+const mysql = require('mysql');
 
-class DBUtils {
-    constructor() {
-        this.dbInstance = new mysqlDb()
-    }
+class Database {
+  constructor() {
+    this.connection = mysql.createPool({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'test',
+    })
+  }
 
-    async datad() {
-        return "OKAY"
-    }
-
-    async connect() {
-        return new Promise((resolve, reject) => {
-            this.dbInstance.db.connect(err => {
-                if (err) {
-                console.error('MySQL connection error:', err)
-                reject(err)
-                } else {
-                console.log('Connected to MySQL')
-                resolve()
-                }
-            })
-        })
-    }
-
-    async close() {
-        return new Promise((resolve, reject) => {
-            this.dbInstance.db.end(err => {
-                if (err) {
-                console.error('Error closing MySQL connection:', err)
-                reject(err)
-                } else {
-                console.log('MySQL connection closed')
-                resolve()
-                }
-            })
-        })
-    }
-
-    async executeQuery(query, params = []) {
-        console.log('MySQL executeQuery ===', this.dbInstance)
-        if (!this.dbInstance) {
-            this.dbInstance = new mysqlDb()
+  query(sql, values) {
+    return new Promise((resolve, reject) => {
+      this.connection.query(sql, values, (error, results, fields) => {
+        if (error) {
+          reject(error);
+          return;
         }
-        await this.connect()
+        resolve(results);
+      });
+    });
+  }
 
-
-
-        return new Promise((resolve, reject) => {
-            this.dbInstance.db.query(query, params, (err, results) => {
-                if (err) {
-                reject(err)
-                } else {
-                resolve(results)
-                }
-            })
-        }).finally(() => this.close())
-    }
+  close() {
+    return new Promise((resolve, reject) => {
+      this.connection.end((error) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+        resolve();
+      });
+    });
+  }
 }
 
-module.exports = DBUtils  
+module.exports = Database;

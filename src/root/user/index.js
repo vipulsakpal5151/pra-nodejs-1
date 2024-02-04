@@ -1,18 +1,8 @@
-const mysqlInstance = require('../../db/mysql.doa')
-const UserController = require('../../controller/user.controller')
-
 class root {
-  constructor({ debugLogs, requiredLogs }) {
-    console.log("OKAY ROOT CONSTRUCT")
+  constructor({ debugLogs, requiredLogs, UserController }) {
     this.debugLogs = debugLogs
     this.requiredLogs = requiredLogs,
-    this.mysqlInstance = new mysqlInstance(),
-    this.UserController = new UserController({
-      debugLogs: this.debugLogs,
-      requiredLogs: this.requiredLogs,
-      mysqlInstance: this.mysqlInstance
-    }),
-    console.log("OKAY Root this.mysqlInstance ROOOOOOOOT", this.mysqlInstance.executeQuery)
+    this.UserController = UserController
   }
 
   async getUser({ id }) {

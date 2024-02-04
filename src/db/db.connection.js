@@ -8,7 +8,7 @@ class MySQLDatabase {
       password: '', // Replace with your MySQL password
       database: 'test',
     }
-    this.db = mysql.createConnection(this.dbConfig)
+    this.connection = mysql.createPool(config);
   }
 
   connect() {

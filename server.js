@@ -19,12 +19,19 @@ class AppInitializer {
                   graphqlHTTP,
                   debugLogs: logs.debugLogs,
                   requiredLogs: logs.requiredLogs,
-                //   mysqlInstance: this.mysqlInstance
+                  mysqlInstance: this.mysqlInstance
                 })
 
                 await userInstance.getRoutes()
                 console.log(`Routes initialized for ${val}`)
             }))
+
+            process.on('SIGINT', async () => {
+                console.log('Closing MySQL connection before server shutdown...');
+                await this.mysqlInstance.close();
+                console.log('MySQL connection closed. Exiting...');
+                process.exit();
+            });
             
             const PORT = 3000
             this.app.listen(PORT, () => {

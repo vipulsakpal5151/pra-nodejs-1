@@ -1,15 +1,21 @@
 const schema = require('../schema/user/index')
 const root = require('../root/user/index')
+const UserController = require('../controller/user.controller')
 
 class User {
-    constructor({ app, graphqlHTTP, debugLogs, requiredLogs }) {
+    constructor({ app, graphqlHTTP, debugLogs, requiredLogs, mysqlInstance }) {
         this.app = app
         this.graphqlHTTP = graphqlHTTP
         this.debugLogs = debugLogs
         this.requiredLogs = requiredLogs
         this.root = new root({ 
-            debugLogs: this.debugLogs,
-            requiredLogs: this.requiredLogs
+            debugLogs,
+            requiredLogs,
+            UserController: new UserController({
+                debugLogs,
+                requiredLogs,
+                mysqlInstance
+            }),
         })
     }
 
