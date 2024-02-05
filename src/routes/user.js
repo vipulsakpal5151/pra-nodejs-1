@@ -4,20 +4,16 @@ const UserController = require('../controller/user.controller')
 const UserModel = require('../model/user.model')
 
 class User {
-    constructor({ app, graphqlHTTP, debugLogs, requiredLogs, mysqlInstance }) {
+    constructor({ app, graphqlHTTP, mysqlInstance, logs }) {
         this.app = app
         this.graphqlHTTP = graphqlHTTP
-        this.debugLogs = debugLogs
-        this.requiredLogs = requiredLogs
+        this.logs = logs
         this.root = new root({ 
-            debugLogs,
-            requiredLogs,
+            logs,
             UserController: new UserController({
-                debugLogs,
-                requiredLogs,
+                logs,
                 UserModel: new UserModel({
-                    debugLogs,
-                    requiredLogs,
+                    logs,
                     mysqlInstance
                 })
             }),
@@ -26,18 +22,14 @@ class User {
 
     async getRoutes() {
         try {
-            this.app.use('/user/graphql', this.graphqlHTTP({
+            const routesConfig = {
                 schema: schema,
                 rootValue: this.root,
-                graphiql: true, // Enable GraphQL web interface
-            }))
+                graphiql: true
+            }
 
-            this.app.use('/user1/graphql', this.graphqlHTTP({
-                schema: schema,
-                rootValue: this.root,
-                graphiql: true, // Enable GraphQL web interface
-            }))
-
+            this.app.use('/user/graphql', this.graphqlHTTP(routesConfig))
+            this.app.use('/user1/graphql', this.graphqlHTTP(routesConfig))
             return true
         } catch (error) {
             console.error('Error initializing routes for user:', error)

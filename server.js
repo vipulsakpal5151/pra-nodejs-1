@@ -8,6 +8,8 @@ class AppInitializer {
         this.app = express()
         this.pathArray = ['user']
         this.mysqlInstance = new mysqlInstance()
+        this.logs = new logs()
+        console.log("logggggggggggsssssss randomId =>", this.logs)
     }
 
     async initialize() {
@@ -17,8 +19,7 @@ class AppInitializer {
                 const userInstance = new routes({
                   app: this.app, 
                   graphqlHTTP,
-                  debugLogs: logs.debugLogs,
-                  requiredLogs: logs.requiredLogs,
+                  logs: this.logs,
                   mysqlInstance: this.mysqlInstance
                 })
 

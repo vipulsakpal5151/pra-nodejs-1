@@ -1,9 +1,17 @@
 class loggerClass {
-    static async debugLogs ({ name = '', value = '', ...additionalLogs }) {
-        if (true) console.log({ ...additionalLogs, action: name, value })
+    constructor () {
+        this.randomId = this.generateRandomId()
     }
 
-    static async requiredLogs ({ name = '', value = '', ...additionalLogs }) {
+    generateRandomId() {
+        return [...Array(30)].map(() => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 62)]).join('');
+    }
+
+    async debugLogs({ name = '', value = '', ...additionalLogs }) {
+        if (true) console.log({ randomId: this.randomId, ...additionalLogs, action: name, value })
+    }
+
+    async requiredLogs ({ name = '', value = '', ...additionalLogs }) {
         console.log({ ...additionalLogs, action: name, value })
     }
 }

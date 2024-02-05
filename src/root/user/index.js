@@ -1,8 +1,7 @@
 class root {
-  constructor({ debugLogs, requiredLogs, UserController }) {
-    this.debugLogs = debugLogs
-    this.requiredLogs = requiredLogs,
-    this.UserController = UserController
+  constructor({ UserController, logs}) {
+    this.UserController = UserController,
+    this.logs = logs
   }
 
   async getUser({ id }) {
@@ -10,7 +9,7 @@ class root {
       const data = await this.UserController.getUser(id)
       return data
     } catch (error) {
-      console.error("Error in getUser resolver:", error)
+      this.logs.debugLogs({ name: 'Error in getUser resolver:', value: error })
       return null // or throw new Error("Custom error message")
     }
   }
